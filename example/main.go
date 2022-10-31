@@ -19,4 +19,5 @@ func (e Etcdmanager) Build() {
 func (e Etcdmanager) Run() {
 	fmt.Println("in run", e)
 	doit.Vars["args"] = "-al"
+	doit.Run("ls {args}")
 }

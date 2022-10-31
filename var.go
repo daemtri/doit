@@ -1,21 +1,20 @@
 package doit
 
 import (
+	"io"
 	"os"
 )
 
 var (
 	Vars = map[string]interface{}{
-		"ext": ext(),
+		"ext": func(w io.Writer, tag string) (int, error) {
+			if os.Getenv("GOOS") == "windows" {
+				return w.Write([]byte(".exe"))
+			}
+			return 0, nil
+		},
 	}
 )
-
-func ext() string {
-	if os.Getenv("GOOS") == "windows" {
-		return ".exe"
-	}
-	return ""
-}
 
 // func BindVar(key string, val any) {
 // 	vars[key] = val

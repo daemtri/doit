@@ -6,31 +6,20 @@ import (
 	"reflect"
 	"sort"
 	"strings"
-
-	"github.com/spf13/pflag"
 )
 
-var (
-	list bool
-)
+func init()  {
+	commands["list"] = printCommands
+}
 
 func Execute(root any) {
 	if root != nil {
 		addCommand("", reflect.ValueOf(root))
 	}
-
-	pflag.BoolVarP(&list, "list", "l", false, "list commands")
-	pflag.Parse()
-
-	if list {
-		printCommands()
-		return
+	cmdString := "list"
+	if len(os.Args) > 1 {
+		cmdString = os.Args[1]
 	}
-	if len(os.Args) <= 1 {
-		fmt.Println("未指定执行命令")
-		os.Exit(2)
-	}
-	cmdString := os.Args[1]
 	cmd, ok := commands[cmdString]
 	if !ok {
 		fmt.Println("指定的命令不存在", cmdString)
