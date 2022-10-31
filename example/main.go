@@ -2,16 +2,15 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/duanqy/lant"
+	"github.com/duanqy/doit"
 )
 
 func main() {
-	lant.RegisterCommand(Etcdmanager{})
-	lant.Execute()
+	doit.Command(Etcdmanager{})
+	doit.Execute(nil)
 }
 
-type Etcdmanager lant.Namespace
+type Etcdmanager doit.Namespace
 
 func (e Etcdmanager) Build() {
 	fmt.Println("in build", e)
@@ -19,5 +18,5 @@ func (e Etcdmanager) Build() {
 
 func (e Etcdmanager) Run() {
 	fmt.Println("in run", e)
-	lant.Vars["args"] = "-al"
+	doit.Vars["args"] = "-al"
 }

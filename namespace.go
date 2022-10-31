@@ -1,3 +1,3 @@
-package lant
+package doit
 
 type Namespace struct{}

@@ -1,4 +1,4 @@
-package lant
+package doit
 
 import (
 	"os/exec"

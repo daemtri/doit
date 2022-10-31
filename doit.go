@@ -1,4 +1,4 @@
-package lant
+package doit
 
 import (
 	"fmt"
@@ -12,10 +12,11 @@ var (
 	list bool
 )
 
-func Execute(roots ...any) {
-	for i := range roots {
-		addCommand("", reflect.ValueOf(roots[i]))
+func Execute(root any) {
+	if root != nil {
+		addCommand("", reflect.ValueOf(root))
 	}
+
 	pflag.BoolVarP(&list, "list", "l", false, "list commands")
 	pflag.Parse()
 

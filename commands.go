@@ -1,4 +1,4 @@
-package lant
+package doit
 
 import (
 	"reflect"
@@ -11,7 +11,7 @@ var (
 	commands = map[string]command{}
 )
 
-func RegisterCommand(x any) {
+func Command(x any) {
 	refVal := reflect.ValueOf(x)
 	namespace := firstLower(reflect.Indirect(refVal).Type().Name())
 	addCommand(namespace, refVal)
