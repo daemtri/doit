@@ -1,6 +1,7 @@
 package lant
 
 import (
+	"bytes"
 	"log"
 	"os"
 
@@ -28,5 +29,5 @@ func RunString(cmd string) string {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	return string(data)
+	return string(bytes.TrimSpace(data))
 }
