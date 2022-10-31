@@ -1,7 +1,6 @@
 package lant
 
 import (
-	"fmt"
 	"reflect"
 	"strings"
 )
@@ -12,29 +11,14 @@ var (
 	commands = map[string]command{}
 )
 
-func AddCommand(x any) {
+func RegisterCommand(x any) {
 	refVal := reflect.ValueOf(x)
-	refTyp := refVal.Type()
-	switch refTyp.Kind() {
-	case reflect.Pointer:
-		switch refTyp.Elem().Kind() {
-		case reflect.Struct:
-			registerStructMethodsCommand(refVal)
-		default:
-			panic(fmt.Errorf("暂不支持注册该类型: %s", refTyp))
-		}
-	case reflect.Struct:
-		registerStructMethodsCommand(refVal)
-	case reflect.Func:
-		panic("稍后支持")
-	default:
-		panic(fmt.Errorf("暂不支持注册该类型: %s", refTyp))
-	}
+	namespace := firstLower(reflect.Indirect(refVal).Type().Name())
+	addCommand(namespace, refVal)
 }
 
-func registerStructMethodsCommand(refVal reflect.Value) {
+func addCommand(namespace string, refVal reflect.Value) {
 	refTyp := refVal.Type()
-	className := firstLower(reflect.Indirect(refVal).Type().Name())
 	for i := 0; i < refTyp.NumMethod(); i++ {
 		if !refTyp.Method(i).IsExported() {
 			continue
@@ -42,11 +26,18 @@ func registerStructMethodsCommand(refVal reflect.Value) {
 		methodName := firstLower(refTyp.Method(i).Name)
 		{
 			methodVal := refVal.Method(i)
-			commands[className+":"+methodName] = func() {
+			commands[joinNamespaceMethod(namespace, methodName)] = func() {
 				methodVal.Call(nil)
 			}
 		}
 	}
+}
+
+func joinNamespaceMethod(namespace, method string) string {
+	if namespace == "" {
+		return method
+	}
+	return namespace + ":" + method
 }
 
 func firstUpper(s string) string {
