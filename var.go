@@ -24,3 +24,9 @@ func ext() string {
 // func GetVar(key string) any {
 // 	return vars[key]
 // }
+
+func Setenv(key, val string) {
+	if err := os.Setenv(key, val); err != nil {
+		panic(err)
+	}
+}
