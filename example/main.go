@@ -7,7 +7,7 @@ import (
 
 func main() {
 	doit.Command(Etcdmanager{})
-	doit.Execute(nil)
+	doit.Execute(Etcdmanager{})
 }
 
 type Etcdmanager doit.Namespace

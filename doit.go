@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"sort"
+	"strings"
 
 	"github.com/spf13/pflag"
 )
@@ -39,7 +41,22 @@ func Execute(root any) {
 
 func printCommands() {
 	fmt.Println("Targets:")
+	globalKeys := make([]string, 0, len(commands))
+	keys := make([]string, 0, len(commands))
 	for key := range commands {
+		if strings.Contains(key, ":") {
+			keys = append(keys, key)
+		} else {
+			globalKeys = append(globalKeys, key)
+		}
+	}
+	sort.Strings(globalKeys)
+	for _, key := range globalKeys {
+		fmt.Print("  ")
+		fmt.Println(key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
 		fmt.Print("  ")
 		fmt.Println(key)
 	}
