@@ -3,6 +3,7 @@ package doit
 import (
 	"io"
 	"os"
+	"runtime"
 
 	"github.com/valyala/fasttemplate"
 )
@@ -10,7 +11,11 @@ import (
 var (
 	Vars = map[string]interface{}{
 		"ext": fasttemplate.TagFunc(func(w io.Writer, tag string) (int, error) {
-			if os.Getenv("GOOS") == "windows" {
+			goos := os.Getenv("GOOS")
+			if goos == "" {
+				goos = runtime.GOOS
+			}
+			if goos == "windows" {
 				return w.Write([]byte(".exe"))
 			}
 			return 0, nil
